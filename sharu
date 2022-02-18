@@ -1,0 +1,41 @@
+<?php
+
+
+$url  = 'http://api.nobelprize.org/v1/prize.json';
+
+$url .= '?category=medicine&year=1900&yearto=2018';
+
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL,$url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+$string = curl_exec($ch);
+curl_close($ch);
+
+$result  = json_decode($string, true);
+
+
+$numyears = count($result['prizes']);
+
+for ($i = 0; $i < $numyears; $i++) {
+
+
+  $cat = $result['prizes'][$i]['category'];
+  $year = $result['prizes'][$i]['year'];
+  print "<b>$cat $year</b><br>\n";
+
+
+  $numlaur = count($result['prizes'][$i]['laureates']);
+
+  for ($j = 0; $j < $numlaur; $j++) {
+
+
+    $firstname = $result['prizes'][$i]['laureates'][$j]['firstname'];
+    $surname = $result['prizes'][$i]['laureates'][$j]['surname'];
+    print "$firstname $surname <br>\n";
+
+  }
+  print "<br>\n";
+}
+
+?>
